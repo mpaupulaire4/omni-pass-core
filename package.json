@@ -1,0 +1,8 @@
+{
+  "name": "omni-pass-core",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/mpaupulaire4/omni-pass-core.git",
+  "author": "Michel Paupulaire <mpaupulaire4@gmail.com>",
+  "license": "GNU GENERAL PUBLIC LICENSE"
+}
