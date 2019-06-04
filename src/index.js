@@ -2,8 +2,6 @@ import cryp from 'crypto'
 import { getCharsetProfile } from './charset'
 import { render } from './renderPassword'
 
-const txtencoder = new TextEncoder();
-
 // Base Namespace
 const NSB = "com.omnipass";
 // The namespace used in calculateMasterKey

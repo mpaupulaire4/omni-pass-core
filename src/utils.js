@@ -1,5 +1,3 @@
-// 24*#SLZs@%VNgj
-
 const specials = [
   '-',
   '[',
