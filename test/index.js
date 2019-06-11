@@ -65,18 +65,11 @@ test('Calculate Entropy', async (t) => {
   t.notDeepEqual(
     [...(await calculateEntropy('username', {
       name: 'some.site.come',
-      counter: 1
     }, 'one'))],
     [...(await calculateEntropy('username', {
       name: 'some.site.come',
-      counter: 2
     }, 'two'))],
     'Should generate different bits given a different context'
   )
 
-  // t.notDeepEqual(
-  //   [...(await calculateEntropy('username', 'password'))],
-  //   [...(await calculateEntropy('username1', 'password'))],
-  //   'Should generate different key given same password but different username'
-  // )
 })
