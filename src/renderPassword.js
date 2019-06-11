@@ -1,7 +1,7 @@
-import { escapeRegex } from './utils'
-import { charsets } from './charset';
+const { escapeRegex } = require('./utils')
+const { charsets } = require ('./charset')
 
-export function render([rand, ...entropy], charset, length, requires = [], pass = []) {
+function render([rand, ...entropy], charset, length, requires = [], pass = []) {
   // recursive end case
   if (pass.length >= length - requires.length) {
     // for each unmet requirement add a prandom char at a prandom index
@@ -29,7 +29,7 @@ export function render([rand, ...entropy], charset, length, requires = [], pass 
   return render(entropy, charset, length, requires, pass.concat(char))
 }
 
-export function renderFromTemplate(entropy, template = '') {
+function renderFromTemplate(entropy, template = '') {
   if (typeof template !== 'string') throw Error('Invalid template parameter')
   const pass = []
   for (const temp of template) {
@@ -41,4 +41,9 @@ export function renderFromTemplate(entropy, template = '') {
     entropy = char_entropy
   }
   return [pass.join(''), entropy]
+}
+
+module.exports = {
+  render,
+  renderFromTemplate
 }

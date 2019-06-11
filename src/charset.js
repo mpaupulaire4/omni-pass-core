@@ -1,6 +1,6 @@
-import { escapeRegex } from './utils'
+const { escapeRegex } = require('./utils')
 
-export const charsets = Object.freeze({
+const charsets = Object.freeze({
   V: "AEIOU",
   v: "aeiou",
   C: "BCDFGHJKLMNPQRSTVWXYZ",
@@ -28,7 +28,7 @@ export const charsets = Object.freeze({
   " ": " ",
 })
 
-export function getCharsetProfile({
+function getCharsetProfile({
   charset = 'X',
   exclude = '',
   required = 'Aano',
@@ -57,4 +57,9 @@ export function getCharsetProfile({
     chars: [...chars].join(''),
     requires
   }
+}
+
+module.exports = {
+  charsets,
+  getCharsetProfile
 }

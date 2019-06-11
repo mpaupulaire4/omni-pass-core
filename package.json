@@ -4,5 +4,8 @@
   "main": "index.js",
   "repository": "https://github.com/mpaupulaire4/omni-pass-core.git",
   "author": "Michel Paupulaire <mpaupulaire4@gmail.com>",
-  "license": "GNU GENERAL PUBLIC LICENSE"
+  "license": "GNU GENERAL PUBLIC LICENSE",
+  "devDependencies": {
+    "tape": "^4.10.2"
+  }
 }

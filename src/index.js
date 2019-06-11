@@ -1,6 +1,6 @@
-import cryp from 'crypto'
-import { getCharsetProfile } from './charset'
-import { render } from './renderPassword'
+const cryp = require('crypto')
+const { getCharsetProfile } = require('./charset')
+const { render } = require('./renderPassword')
 
 // Base Namespace
 const NSB = "com.omnipass";
@@ -33,7 +33,7 @@ async function calculateMasterKey(password, { ID }) {
 }
 
 // calculateSubKey takes ~ 3.000ms to complete
-async function calculateSubKey(masterKey, {name, counter = 1, length}, context = 'password') {
+async function calculateEntropy(masterKey, {name, counter = 1, rounds = 10000, digest = 'sha256'}, context = 'password') {
   if (!name || typeof name !== 'string') {
     throw Error("Argument name not present");
   }
@@ -51,9 +51,9 @@ async function calculateSubKey(masterKey, {name, counter = 1, length}, context =
     cryp.pbkdf2(
       masterKey,
       salt,
-      10000,
+      rounds,
       64,
-      'sha256',
+      digest,
       (e, key) => {
         if (e) reject(e)
         else resolve(key)
@@ -62,18 +62,9 @@ async function calculateSubKey(masterKey, {name, counter = 1, length}, context =
   })
 }
 
-async function calculateEntropy(password, config = {}, context) {
-  const masterKey = await calculateMasterKey(password, config)
-  const subKey = await calculateSubKey(masterKey, config, context)
-  return subKey
-}
-
 export async function generate(
   password,
-  {
-    length = 14,
-    ...config
-  } = {},
+  config,
   context
 ) {
 
@@ -82,15 +73,15 @@ export async function generate(
     requires
   } = getCharsetProfile(config)
 
-  if (length < 1 || length > 36) {
-    throw Error("Argument length out of range");
-  }
-
-  const entropy = await calculateEntropy(password, config, context);
+  const entropy = await calculateEntropy(
+    await calculateMasterKey(password, config),
+    config,
+    context
+  );
   const [pass] = render(
     entropy,
     chars,
-    length,
+    config.length,
     requires
   )
 
