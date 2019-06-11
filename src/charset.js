@@ -25,7 +25,8 @@ const charsets = Object.freeze({
   get O() {
     return this.o
   },
-  " ": " ",
+  S: " ",
+  s: " ",
 })
 
 function getCharsetProfile({

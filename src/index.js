@@ -33,7 +33,7 @@ async function calculateMasterKey(username, password) {
 }
 
 // calculateSubKey takes ~ 3.000ms to complete
-async function calculateEntropy(masterKey, {name, counter = 1, rounds = 10000, digest = 'sha256'}, context = 'password') {
+async function calculateEntropy(masterKey, {context, name = 'password', counter = 1, rounds = 10000, digest = 'sha256'}) {
   if (!name || typeof name !== 'string') {
     throw Error("Argument name not present");
   }
@@ -46,7 +46,7 @@ async function calculateEntropy(masterKey, {name, counter = 1, rounds = 10000, d
     throw Error("Argument counter out of range");
   }
 
-  const salt = `${SubKeyNS}.${name.length}.${name}.${context.length}.${context}.${counter}`
+  const salt = `${SubKeyNS}.${context.length}.${context}.${name.length}.${name}.${counter}`
   return new Promise((resolve, reject) => {
     cryp.pbkdf2(
       masterKey,
@@ -65,8 +65,7 @@ async function calculateEntropy(masterKey, {name, counter = 1, rounds = 10000, d
 async function generate(
   username,
   password,
-  config,
-  context
+  config
 ) {
 
   const {
@@ -77,7 +76,6 @@ async function generate(
   const entropy = await calculateEntropy(
     await calculateMasterKey(username, password),
     config,
-    context
   );
   const [pass] = render(
     entropy,

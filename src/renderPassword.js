@@ -1,7 +1,7 @@
 const { escapeRegex } = require('./utils')
 const { charsets } = require ('./charset')
 
-function render([rand, ...entropy], charset, length, requires = [], pass = []) {
+function render([rand, ...entropy], charset, length = 16, requires = [], pass = []) {
   // recursive end case
   if (pass.length >= length - requires.length) {
     // for each unmet requirement add a prandom char at a prandom index
