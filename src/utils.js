@@ -17,7 +17,7 @@ const specials = [
   '|',
 ]
 
-export function escapeRegex(string) {
+function escapeRegex(string) {
   return string.replace(RegExp(`[${specials.join('\\')}]`, 'g'), '\\$&')
 }
 

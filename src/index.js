@@ -10,9 +10,9 @@ const KeyNS   = `${NSB}.key`;
 const SubKeyNS   = `${NSB}.subkey`;
 
 // calculateMasterKey takes ~ 1450.000ms to complete
-async function calculateMasterKey(password, { ID }) {
-  if (!ID || !ID.length) {
-    throw Error("Argument ID not present");
+async function calculateMasterKey(username, password) {
+  if (!username || !username.length) {
+    throw Error("Argument username not present");
   }
 
   if (!password || !password.length) {
@@ -20,7 +20,7 @@ async function calculateMasterKey(password, { ID }) {
   }
 
   return new Promise((resolve, reject) => {
-    cryp.scrypt(password, `${KeyNS}.${ID.length}.${ID}`, 64, {
+    cryp.scrypt(password, `${KeyNS}.${username.length}.${username}`, 64, {
       N: 32768,
       r: 8,
       p: 2,
@@ -62,7 +62,8 @@ async function calculateEntropy(masterKey, {name, counter = 1, rounds = 10000, d
   })
 }
 
-export async function generate(
+async function generate(
+  username,
   password,
   config,
   context
@@ -74,7 +75,7 @@ export async function generate(
   } = getCharsetProfile(config)
 
   const entropy = await calculateEntropy(
-    await calculateMasterKey(password, config),
+    await calculateMasterKey(username, password),
     config,
     context
   );
@@ -86,4 +87,10 @@ export async function generate(
   )
 
   return pass
+}
+
+module.exports = {
+  generate,
+  calculateMasterKey,
+  calculateEntropy,
 }

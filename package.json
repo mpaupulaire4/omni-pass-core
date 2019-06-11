@@ -1,11 +1,20 @@
 {
   "name": "omni-pass-core",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/index.js",
   "repository": "https://github.com/mpaupulaire4/omni-pass-core.git",
   "author": "Michel Paupulaire <mpaupulaire4@gmail.com>",
   "license": "GNU GENERAL PUBLIC LICENSE",
+  "scripts": {
+    "test": "nodemon test/index.js"
+  },
   "devDependencies": {
+    "nodemon": "^1.19.1",
     "tape": "^4.10.2"
+  },
+  "nodemonConfig": {
+    "events": {
+      "restart": "reset"
+    }
   }
 }
