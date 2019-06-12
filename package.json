@@ -6,18 +6,13 @@
   "author": "Michel Paupulaire <mpaupulaire4@gmail.com>",
   "license": "GPL-3.0-only",
   "scripts": {
-    "test:watch": "nodemon test/index.js | faucet",
-    "test": "node test/index.js | tap-markdown > Test.md"
+    "test:dev": "tap -w",
+    "test": "tap"
   },
   "devDependencies": {
-    "@extendscripter/tap-markdown": "^1.3.1",
-    "faucet": "^0.0.1",
-    "nodemon": "^1.19.1",
-    "tape": "^4.10.2"
+    "tap": "^14.2.2"
   },
-  "nodemonConfig": {
-    "events": {
-      "restart": "reset"
-    }
+  "dependencies": {
+    "scrypt-js": "2.0.4"
   }
 }

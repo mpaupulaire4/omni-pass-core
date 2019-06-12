@@ -1,4 +1,5 @@
-const cryp = require('crypto')
+const crypo = require('crypto')
+const scrypt = require('scrypt-js')
 const { getCharsetProfile } = require('./charset')
 const { render } = require('./renderPassword')
 
@@ -20,14 +21,17 @@ async function calculateMasterKey(username, password) {
   }
 
   return new Promise((resolve, reject) => {
-    cryp.scrypt(password, `${KeyNS}.${username.length}.${username}`, 64, {
-      N: 32768,
-      r: 8,
-      p: 2,
-      maxmem: 64*1024*1024
-    }, (error, key) => {
+    // TODO either normaliza password and salt or restrict the posibilities /^[A-Za-z0-9!@#$%^&*()]+$/
+    scrypt(
+      Buffer.from(password.normalize('NFKC')),
+      Buffer.from(`${KeyNS}.${username.length}.${username}`.normalize('NFKC')),
+      32768,
+      8,
+      2,
+      64,
+      (error, progress, key) => {
       if (error) reject(error)
-      else resolve(key)
+      else if (key) resolve(Buffer.from(key))
     })
   })
 }
@@ -48,7 +52,7 @@ async function calculateEntropy(masterKey, {context, name = 'password', counter 
 
   const salt = `${SubKeyNS}.${context.length}.${context}.${name.length}.${name}.${counter}`
   return new Promise((resolve, reject) => {
-    cryp.pbkdf2(
+    crypo.pbkdf2(
       masterKey,
       salt,
       rounds,
