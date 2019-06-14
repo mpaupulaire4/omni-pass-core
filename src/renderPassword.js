@@ -1,13 +1,13 @@
 const { escapeRegex } = require('./utils')
-const { charsets } = require ('./charset')
+const { charsets, getCharsetProfile } = require ('./charset')
 
-function render([rand, ...entropy], charset, length = 16, requires = [], pass = []) {
+function renderRandom([rand, ...entropy], charset, length = 16, requires = [], pass = []) {
   // recursive end case
   if (pass.length >= length - requires.length) {
     // for each unmet requirement add a prandom char at a prandom index
     requires.forEach((set) => {
       const r = rand % pass.length
-      const [char, char_entropy] = render(entropy, set, 1)
+      const [char, char_entropy] = renderRandom(entropy, set, 1)
       pass.splice(r, 0, char)
       rand = char_entropy.shift()
       entropy = char_entropy
@@ -26,7 +26,7 @@ function render([rand, ...entropy], charset, length = 16, requires = [], pass = 
   if ( i !== -1) requires.splice(i, 1)
 
   // next step
-  return render(entropy, charset, length, requires, pass.concat(char))
+  return renderRandom(entropy, charset, length, requires, pass.concat(char))
 }
 
 function renderFromTemplate(entropy, template = '') {
@@ -36,14 +36,27 @@ function renderFromTemplate(entropy, template = '') {
     const chars = charsets[temp]
     if (!chars) throw Error('Invalid template parameter')
 
-    const [char, char_entropy] = render(entropy, chars, 1)
+    const [char, char_entropy] = renderRandom(entropy, chars, 1)
     pass.push(char)
     entropy = char_entropy
   }
   return [pass.join(''), entropy]
 }
 
+function render(entropy, config) {
+
+  if (config.template && typeof config.template === 'string') {
+    return renderFromTemplate(entropy, config.template)
+  }
+
+  const {
+    chars,
+    requires
+  } = getCharsetProfile(config)
+
+  return renderRandom(entropy, chars, config.length, requires)
+}
+
 module.exports = {
-  render,
-  renderFromTemplate
+  render
 }

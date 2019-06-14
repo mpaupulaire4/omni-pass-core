@@ -13,6 +13,8 @@
     "tap": "^14.2.2"
   },
   "dependencies": {
+    "pbkdf2": "^3.0.17",
+    "safe-buffer": "^5.1.2",
     "scrypt-js": "2.0.4"
   }
 }

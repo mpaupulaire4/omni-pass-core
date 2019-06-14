@@ -32,9 +32,9 @@ const charsets = Object.freeze({
 function getCharsetProfile({
   charset = 'X',
   exclude = '',
-  required = 'Aano',
+  required = '',
 }) {
-  if (!charset || !charset.length || typeof charset !== 'string') {
+  if (!charset || typeof charset !== 'string') {
     throw Error('Argument charset not valid');
   }
   if (typeof required !== 'string') {
