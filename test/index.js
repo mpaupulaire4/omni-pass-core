@@ -30,46 +30,6 @@ tap.test('Calculate Master Key', async (t) => {
   )
 })
 
-tap.test('Calculate Entropy', async (t) => {
-
-  t.matchSnapshot(
-    await calculateEntropy(Buffer.from([1,2,3,4]), {
-      context: 'some.site.com'
-    }),
-    'Defaults Should always generate the same prandom bits'
-  )
-
-  t.deepEqual(
-    await calculateEntropy('username', { context: 'some.sute.com'}),
-    await calculateEntropy('username', { context: 'some.sute.com'}),
-    'Should generate the same bits given the same inputs'
-  )
-
-  t.notDeepEqual(
-    await calculateEntropy('username', {
-      context: 'some.site.come',
-      counter: 1
-    }),
-    await calculateEntropy('username', {
-      context: 'some.site.come',
-      counter: 2
-    }),
-    'Should generate different bits given a different counter'
-  )
-
-  t.notDeepEqual(
-    await calculateEntropy('username', {
-      name: 'one',
-      context: 'some.site.come',
-    }),
-    await calculateEntropy('username', {
-      context: 'some.site.come',
-      name: 'two'
-    }),
-    'Should generate different bits given a different context'
-  )
-})
-
 tap.test('Generate', async (t) => {
 
   t.matchSnapshot(
